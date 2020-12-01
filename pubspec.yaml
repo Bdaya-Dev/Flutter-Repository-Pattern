@@ -1,7 +1,7 @@
 name: bdaya_repository_pattern
 description: A simple implmentation of the repository pattern used at our company.
 version: 1.0.0
-author: ''
+repository: https://github.com/Bdaya-Dev/Flutter-Repository-Pattern
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
