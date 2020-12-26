@@ -1,4 +1,4 @@
-## [1.1.0] - 26/Dec/2020
+## [1.1.0+2] - 26/Dec/2020
 
 * Renamed `listen()` to `stream`
 * `stream` now seeds the initial value
