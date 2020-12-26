@@ -17,10 +17,10 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
   }
 
   /// Notifies the user when any write operations occur.
-  ///
-  /// Note that this doesn't fire initially.
-  Stream<Set<TKey>> listen() =>
-      dataBox.watch().map((value) => dataBox.keys.cast<TKey>().toSet());
+  Stream<Set<TKey>> get stream async* {
+    yield dataBox.keys.cast<TKey>().toSet();
+    yield* dataBox.watch().map((value) => dataBox.keys.cast<TKey>().toSet());
+  }
 
   @override
   Future<void> init() async {

@@ -24,10 +24,10 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   }
 
   /// Notifies the user when any write operations occur.
-  ///
-  /// Note that this doesn't fire initially.
-  Stream<Map<TKey, TVal>> listen() =>
-      dataBox.watch().map((value) => getAllValues());
+  Stream<Map<TKey, TVal>> get stream async* {
+    yield getAllValues();
+    yield* dataBox.watch().map((value) => getAllValues());
+  }
 
   /// Gets all the values stored in the box
   Map<TKey, TVal> getAllValues() {
