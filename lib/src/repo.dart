@@ -10,6 +10,13 @@ abstract class Repo<TKey, TVal> {
   /// Sets the keys and values provided in [newValues].
   Future<void> putAll(Map<TKey, TVal> newValues);
 
+  /// Same as [putAll], but instead of removing old objects, changes (mutates) their values to new values
+  Future<void> putAllAndUpdateExisting(
+    Map<TKey, TVal> newValues,
+    void Function(TKey key, TVal mutateMe, TVal newValueReadOnly)
+        mutateExisting,
+  );
+
   /// Clears the box then sets the keys and values provided in [newValues].
   Future<void> assignAll(Map<TKey, TVal> newValues);
 

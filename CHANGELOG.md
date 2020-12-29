@@ -1,3 +1,7 @@
+## [1.2.0+3] - 29/Dec/2020
+
+* Added `putAllAndUpdateExisting()` to repo
+
 ## [1.1.0+2] - 26/Dec/2020
 
 * Renamed `listen()` to `stream`

@@ -40,6 +40,28 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   }
 
   @override
+  Future<void> putAllAndUpdateExisting(
+    Map<TKey, TVal> newValues,
+    void Function(TKey key, TVal mutateMe, TVal newValueReadOnly)
+        mutateExisting,
+  ) async {
+    final actualNewValue = <TKey, TVal>{};
+    for (var item in newValues.entries) {
+      final key = item.key;
+      final val = item.value;
+
+      if (!dataBox.containsKey(key)) {
+        actualNewValue[key] = val;
+      } else {
+        final oldVal = await getValueById(key);
+        mutateExisting(key, oldVal, val);
+        actualNewValue[key] = oldVal;
+      }
+    }
+    await putAll(actualNewValue);
+  }
+
+  @override
   Future<void> assignAll(Map<TKey, TVal> newValues) async {
     await dataBox.clear();
     await dataBox.putAll(newValues);
