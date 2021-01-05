@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'repo.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// A synchronous repository based on Hive's [Box]
 ///
@@ -27,6 +28,34 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   Stream<Map<TKey, TVal>> get stream async* {
     yield getAllValues();
     yield* dataBox.watch().map((value) => getAllValues());
+  }
+
+  /// Creates a stream that listens for specific keys
+  Stream<Map<TKey, TVal>> streamFor(Iterable<TKey> keys) {
+    return Rx.combineLatestList<BoxEvent>(
+      keys.map(
+        (k) async* {
+          var val = dataBox.get(k);
+          yield BoxEvent(k, val, val == null);
+          yield* dataBox.watch(key: k);
+        },
+      ),
+    ).map(
+      (event) {
+        return Map.fromEntries(
+          event
+              .where(
+                (z) => !z.deleted,
+              )
+              .map(
+                (z) => MapEntry(
+                  z.key,
+                  z.value,
+                ),
+              ),
+        );
+      },
+    );
   }
 
   /// Gets all the values stored in the box

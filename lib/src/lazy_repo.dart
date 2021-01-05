@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:rxdart/rxdart.dart';
 import 'repo.dart';
 
 /// An asynchronous repository based on Hive's [LazyBox].
@@ -20,6 +21,34 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
   Stream<Set<TKey>> get stream async* {
     yield dataBox.keys.cast<TKey>().toSet();
     yield* dataBox.watch().map((value) => dataBox.keys.cast<TKey>().toSet());
+  }
+
+  /// Creates a stream that listens for specific keys
+  Stream<Map<TKey, TVal>> streamFor(Iterable<TKey> keys) {
+    return Rx.combineLatestList<BoxEvent>(
+      keys.map(
+        (k) async* {
+          var val = await dataBox.get(k);
+          yield BoxEvent(k, val, val == null);
+          yield* dataBox.watch(key: k);
+        },
+      ),
+    ).map(
+      (event) {
+        return Map.fromEntries(
+          event
+              .where(
+                (z) => !z.deleted,
+              )
+              .map(
+                (z) => MapEntry(
+                  z.key,
+                  z.value,
+                ),
+              ),
+        );
+      },
+    );
   }
 
   @override
