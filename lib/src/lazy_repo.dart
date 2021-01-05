@@ -11,9 +11,9 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
   LazyBox<TVal> get dataBox => _box;
 
   /// Gets the value based on the key
-  Future<TVal> getValueById(TKey key) {
+  Future<TVal> getValueById(TKey key, {TVal defaultValue}) async {
     if (key == null) return null;
-    return dataBox.get(key);
+    return await dataBox.get(key, defaultValue: defaultValue);
   }
 
   /// Notifies the user when any write operations occur.
@@ -25,6 +25,13 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
   @override
   Future<void> init() async {
     _box = await Hive.openLazyBox(boxName);
+  }
+
+  /// Gets the first (key,value) stored in the box
+  Future<MapEntry<TKey, TVal>> get firstOrNull async {
+    var firstOrDefaultKey = dataBox.keys.isEmpty ? null : dataBox.keys.first;
+    if (firstOrDefaultKey == null) return null;
+    return MapEntry(firstOrDefaultKey, await dataBox.get(firstOrDefaultKey));
   }
 
   /// Gets all the values stored in the box.

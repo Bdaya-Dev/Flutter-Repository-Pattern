@@ -11,11 +11,11 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   Box<TVal> get dataBox => _box;
 
   /// Gets the value based on the key
-  TVal getValueById(TKey key) {
+  TVal getValueById(TKey key, {TVal defaultValue}) {
     if (key == null) {
       return null;
     }
-    return dataBox.get(key);
+    return dataBox.get(key, defaultValue: defaultValue);
   }
 
   @override
@@ -32,6 +32,13 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   /// Gets all the values stored in the box
   Map<TKey, TVal> getAllValues() {
     return dataBox.toMap().cast<TKey, TVal>();
+  }
+
+  /// Gets the first (key,value) stored in the box
+  MapEntry<TKey, TVal> get firstOrNull {
+    var firstOrDefaultKey = dataBox.keys.isEmpty ? null : dataBox.keys.first;
+    if (firstOrDefaultKey == null) return null;
+    return MapEntry(firstOrDefaultKey, dataBox.get(firstOrDefaultKey));
   }
 
   @override
