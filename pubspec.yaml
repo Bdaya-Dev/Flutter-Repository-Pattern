@@ -8,3 +8,4 @@ environment:
 
 dependencies:
   hive: ^1.4.4+1  
+  rxdart:
