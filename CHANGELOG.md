@@ -1,3 +1,7 @@
+## [1.2.1+4] - 08/Jan/2020
+
+* Added `streamFor` to repo
+
 ## [1.2.0+3] - 29/Dec/2020
 
 * Added `putAllAndUpdateExisting()` to repo
