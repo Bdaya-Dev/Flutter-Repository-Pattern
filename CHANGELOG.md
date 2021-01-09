@@ -1,3 +1,7 @@
+## [2.0.1] - 09/Jan/2020
+
+* Removed "+" from version 
+
 ## [2.0.0+6] - 09/Jan/2020
 
 * Breaking changes with some extra helpers and improvements
