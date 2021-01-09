@@ -25,13 +25,20 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   }
 
   /// Notifies the user when any write operations occur.
-  Stream<Map<TKey, TVal>> get stream async* {
+  Stream<Map<TKey, TVal>> get dataStream async* {
     yield getAllValues();
     yield* dataBox.watch().map((value) => getAllValues());
   }
 
+  @override
+  Iterable<TKey> get keys => dataBox.keys.cast<TKey>();
+
+  @override
+  Stream<BoxEvent> watch({TKey key}) => dataBox.watch(key: key);
+
   /// Creates a stream that listens for specific keys
-  Stream<Map<TKey, TVal>> streamFor(Iterable<TKey> keys) {
+  @override
+  Stream<Map<TKey, TVal>> dataStreamFor(Iterable<TKey> keys) {
     return Rx.combineLatestList<BoxEvent>(
       keys.map(
         (k) async* {
@@ -65,9 +72,20 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
 
   /// Gets the first (key,value) stored in the box
   MapEntry<TKey, TVal> get firstOrNull {
-    var firstOrDefaultKey = dataBox.keys.isEmpty ? null : dataBox.keys.first;
+    var firstOrDefaultKey = firstOrNullKey;
     if (firstOrDefaultKey == null) return null;
     return MapEntry(firstOrDefaultKey, dataBox.get(firstOrDefaultKey));
+  }
+
+  @override
+  Stream<MapEntry<TKey, TVal>> firstEntryStream([
+    Duration debounceDuration = const Duration(milliseconds: 200),
+  ]) async* {
+    yield firstOrNull;
+    yield* dataBox
+        .watch()
+        .debounceTime(debounceDuration) //debounce to prevent spamming the event
+        .map((event) => firstOrNull);
   }
 
   @override
@@ -111,5 +129,10 @@ abstract class ActiveRepo<TKey, TVal> extends Repo<TKey, TVal> {
   @override
   Future<void> clear() async {
     await dataBox.clear();
+  }
+
+  @override
+  Future<void> dispose() async {
+    await dataBox.close();
   }
 }

@@ -1,3 +1,7 @@
+## [2.0.0+6] - 09/Jan/2020
+
+* Breaking changes with some extra helpers and improvements
+
 ## [1.2.2+5] - 09/Jan/2020
 
 * Added `firstOrNull` to repo

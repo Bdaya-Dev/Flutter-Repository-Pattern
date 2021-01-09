@@ -14,7 +14,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    sub = cacheService.userRepo.stream.listen((event) {
+    sub = cacheService.userRepo.dataStream.listen((event) {
       usersList.assignAll(event);
     });
   }

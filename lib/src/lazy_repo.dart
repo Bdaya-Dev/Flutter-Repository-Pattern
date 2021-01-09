@@ -17,14 +17,15 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
     return await dataBox.get(key, defaultValue: defaultValue);
   }
 
-  /// Notifies the user when any write operations occur.
-  Stream<Set<TKey>> get stream async* {
-    yield dataBox.keys.cast<TKey>().toSet();
-    yield* dataBox.watch().map((value) => dataBox.keys.cast<TKey>().toSet());
-  }
+  @override
+  Stream<BoxEvent> watch({TKey key}) => dataBox.watch(key: key);
+
+  @override
+  Set<TKey> get keys => dataBox.keys.cast<TKey>().toSet();
 
   /// Creates a stream that listens for specific keys
-  Stream<Map<TKey, TVal>> streamFor(Iterable<TKey> keys) {
+  @override
+  Stream<Map<TKey, TVal>> dataStreamFor(Iterable<TKey> keys) {
     return Rx.combineLatestList<BoxEvent>(
       keys.map(
         (k) async* {
@@ -61,6 +62,17 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
     var firstOrDefaultKey = dataBox.keys.isEmpty ? null : dataBox.keys.first;
     if (firstOrDefaultKey == null) return null;
     return MapEntry(firstOrDefaultKey, await dataBox.get(firstOrDefaultKey));
+  }
+
+  @override
+  Stream<MapEntry<TKey, TVal>> firstEntryStream([
+    Duration debounceDuration = const Duration(milliseconds: 200),
+  ]) async* {
+    yield await firstOrNull;
+    yield* dataBox
+        .watch()
+        .debounceTime(debounceDuration) //debounce to prevent spamming the event
+        .switchMap((event) => firstOrNull.asStream());
   }
 
   /// Gets all the values stored in the box.
@@ -115,5 +127,10 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
   @override
   Future<void> clear() async {
     await dataBox.clear();
+  }
+
+  @override
+  Future<void> dispose() async {
+    await dataBox.close();
   }
 }
