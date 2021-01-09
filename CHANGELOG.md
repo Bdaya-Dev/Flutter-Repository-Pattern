@@ -1,3 +1,7 @@
+## [1.2.2+5] - 09/Jan/2020
+
+* Added `firstOrNull` to repo
+
 ## [1.2.1+4] - 08/Jan/2020
 
 * Added `streamFor` to repo
