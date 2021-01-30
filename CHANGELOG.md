@@ -1,3 +1,7 @@
+## [2.0.2] - 30/Jan/2020
+
+* Added `putAllputAllAndUpdateExistingMapped()`
+ 
 ## [2.0.1] - 09/Jan/2020
 
 * Removed "+" from version 
