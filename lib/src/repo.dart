@@ -70,6 +70,12 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
         mutateExisting,
   );
 
+  /// Same as [putAllAndUpdateExisting] but [mutateExisting] can receive a null existing value
+  Future<void> putAllAndUpdateExistingMapped<TMapped>(
+    Map<TKey, TMapped> newValues,
+    TVal Function(TKey key, TVal mutateMe, TMapped newValue) mutateExisting,
+  );
+
   /// Clears the box then sets the keys and values provided in [newValues].
   Future<void> assignAll(Map<TKey, TVal> newValues);
 

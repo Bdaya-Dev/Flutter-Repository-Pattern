@@ -87,6 +87,22 @@ abstract class LazyRepo<TKey, TVal> extends Repo<TKey, TVal> {
   }
 
   @override
+  Future<void> putAllAndUpdateExistingMapped<TMapped>(
+    Map<TKey, TMapped> newValues,
+    TVal Function(TKey key, TVal mutateMe, TMapped newValue) mutateExisting,
+  ) async {
+    final actualNewValue = <TKey, TVal>{};
+    for (var item in newValues.entries) {
+      final key = item.key;
+      final val = item.value;
+
+      final res = await getValueById(key, defaultValue: null);
+      actualNewValue[key] = mutateExisting(key, res, val);
+    }
+    await putAll(actualNewValue);
+  }
+
+  @override
   Future<void> putAll(Map<TKey, TVal> silentMap) async {
     await dataBox.putAll(silentMap);
   }
