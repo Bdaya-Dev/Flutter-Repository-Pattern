@@ -1,6 +1,6 @@
-## [2.0.2] - 30/Jan/2020
+## [2.0.3] - 30/Jan/2020
 
-* Added `putAllputAllAndUpdateExistingMapped()`
+* Added `putAllAndUpdateExistingMapped()`
  
 ## [2.0.1] - 09/Jan/2020
 
