@@ -44,7 +44,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.2.0+3"
+    version: "2.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -461,6 +461,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  rxdart:
+    dependency: transitive
+    description:
+      name: rxdart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.25.0"
   shelf:
     dependency: transitive
     description:
