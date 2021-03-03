@@ -1,4 +1,4 @@
-## [3.0.0] - 04/Mar/2021
+## [3.0.0-dev.1] - 04/Mar/2021
 
 * Added nullsafety support
 
