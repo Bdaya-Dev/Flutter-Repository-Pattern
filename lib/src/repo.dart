@@ -1,4 +1,5 @@
 import 'package:bdaya_repository_pattern/src/disposable.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
 
 abstract class Repo<TKey, TVal> with DisposableMixin {
@@ -19,8 +20,8 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   Set<TKey> get keySet => keys.toSet();
 
   /// get the first key, or null if the box is empty
-  TKey get firstOrNullKey =>
-      keys.firstWhere((element) => true, orElse: () => null);
+  TKey? get firstOrNullKey =>
+      keys.firstWhereOrNull((element) => true);
 
   /// All the keys in the box.
   ///
@@ -28,7 +29,7 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   Iterable<TKey> get keys;
 
   /// watch the dataBox for changes to a specific key, use [dataStreamFor] instead
-  Stream<BoxEvent> watch({TKey key});
+  Stream<BoxEvent> watch({TKey? key});
 
   /// watch for multiple keys, the result map will only contain (key,value) pairs that are NOT deleted
   Stream<Map<TKey, TVal>> dataStreamFor(Iterable<TKey> keys);

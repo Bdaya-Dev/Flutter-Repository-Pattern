@@ -1,3 +1,7 @@
+## [3.0.0] - 04/Mar/2021
+
+* Added nullsafety support
+
 ## [2.0.1] - 09/Jan/2020
 
 * Removed "+" from version 
