@@ -20,8 +20,7 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   Set<TKey> get keySet => keys.toSet();
 
   /// get the first key, or null if the box is empty
-  TKey? get firstOrNullKey =>
-      keys.firstWhereOrNull((element) => true);
+  TKey? get firstOrNullKey => keys.firstWhereOrNull((element) => true);
 
   /// All the keys in the box.
   ///
@@ -47,7 +46,7 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   }
 
   /// Stream that emits firstOrNull on every change for the box, with an optional debounce
-  Stream<MapEntry<TKey, TVal>> firstEntryStream([
+  Stream<MapEntry<TKey, TVal>?> firstEntryStream([
     Duration debounceDuration = const Duration(milliseconds: 200),
   ]);
 
@@ -55,7 +54,7 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   Future<void> putAndUpdateExisting(
     TKey key,
     TVal newValue,
-    void Function(TKey key, TVal mutateMe, TVal newValueReadOnly)
+    void Function(TKey key, TVal? mutateMe, TVal newValueReadOnly)
         mutateExisting,
   ) async {
     await putAllAndUpdateExisting({key: newValue}, mutateExisting);
@@ -74,7 +73,7 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   /// Same as [putAllAndUpdateExisting] but [mutateExisting] can receive a null existing value
   Future<void> putAllAndUpdateExistingMapped<TMapped>(
     Map<TKey, TMapped> newValues,
-    TVal Function(TKey key, TVal mutateMe, TMapped newValue) mutateExisting,
+    TVal Function(TKey key, TVal? mutateMe, TMapped newValue) mutateExisting,
   );
 
   /// Clears the box then sets the keys and values provided in [newValues].

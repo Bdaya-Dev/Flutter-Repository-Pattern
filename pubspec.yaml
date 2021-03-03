@@ -1,14 +1,10 @@
 name: bdaya_repository_pattern
 description: A simple implmentation of the repository pattern used at our company.
-<<<<<<< HEAD
 version: 3.0.0
-=======
-version: 2.0.4
->>>>>>> c4ac49bcd21e63ce7b788dcfbbae08b8d14b5c97
 repository: https://github.com/Bdaya-Dev/Flutter-Repository-Pattern
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   hive: ^1.6.0-nullsafety.2
