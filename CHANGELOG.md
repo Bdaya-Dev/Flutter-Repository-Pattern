@@ -1,3 +1,7 @@
+## [3.0.0] - 05/Apr/2021
+
+* Fixed hive dependencies
+
 ## [3.0.0-dev.1] - 04/Mar/2021
 
 * Added nullsafety support

@@ -1,5 +1,4 @@
 import 'package:bdaya_repository_pattern/src/disposable.dart';
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hive/hive.dart';
 
 abstract class Repo<TKey, TVal> with DisposableMixin {
@@ -20,7 +19,7 @@ abstract class Repo<TKey, TVal> with DisposableMixin {
   Set<TKey> get keySet => keys.toSet();
 
   /// get the first key, or null if the box is empty
-  TKey? get firstOrNullKey => keys.firstWhereOrNull((element) => true);
+  TKey? get firstOrNullKey => keys.length == 0 ? null : keys.first;
 
   /// All the keys in the box.
   ///
