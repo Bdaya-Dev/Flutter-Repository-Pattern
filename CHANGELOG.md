@@ -1,3 +1,7 @@
+## [3.1.0] - 19/Jan/2022
+
+* Pumped rxdart version
+
 ## [3.0.0] - 05/Apr/2021
 
 * Fixed hive dependencies
